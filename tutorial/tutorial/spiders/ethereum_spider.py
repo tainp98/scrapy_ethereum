@@ -8,7 +8,7 @@ class QuotesSpider(scrapy.Spider):
 
     def start_requests(self):
         urls = [
-            'https://etherscan.io/txs?p=30',
+            'https://etherscan.io/txs?p=2',
         ]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
@@ -75,4 +75,4 @@ class QuotesSpider(scrapy.Spider):
             #print(items)
             #print(df)
             #df.to_csv("ethereum1.csv", index=False)
-            df.to_json("ethereum1.json")
+            df.to_json("ethereum.json", orient='records')
