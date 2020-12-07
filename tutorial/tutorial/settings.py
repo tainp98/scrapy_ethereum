@@ -32,6 +32,8 @@ ROBOTSTXT_OBEY = True
 RANDOMIZE_DOWNLOAD_DELAY=False
 DOWNLOAD_DELAY=60/40
 CONCURRENT_REQUESTS_PER_IP=40
+# Don't filter duplicate url 
+DUPEFILTER_CLASS = 'scrapy.dupefilters.BaseDupeFilter'
 # Disable cookies (enabled by default)
 #COOKIES_ENABLED = False
 #DEPTH_LIMIT = 40
