@@ -3,12 +3,15 @@ from scrapy_splash import SplashRequest
 from scrapy.loader import ItemLoader
 from ..items import EthereumItem
 import pandas as pd
+from kafka import KafkaProducer, KafkaConsumer
+from datetime import datetime
+import time
 class QuotesSpider(scrapy.Spider):
     name = "ethereum"
 
     def start_requests(self):
         urls = [
-            'https://etherscan.io/txs?p=2',
+            'https://etherscan.io/txs?p=10',
         ]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
@@ -71,8 +74,18 @@ class QuotesSpider(scrapy.Spider):
             # print(len(items['valueEther']))
             # print(len(items['txnFee']))
             # print(items['valueEther'])
-            df = pd.DataFrame(dict(items))
+            #df = pd.DataFrame(dict(items))
+            producer = KafkaProducer(bootstrap_servers=['192.168.43.75:9092'])
+            item = dict(items)
+            for i in range(len(item['valueEther'])):
+                producer.send('quickstart-events',item['valueEther'][i].encode('utf-8'))
+                time.sleep(2)
+               
+            # print(dict(items))
+            # consumer = KafkaConsumer('quickstart-events', bootstrap_servers=['localhost:9092'])
+            # for message in consumer:
+            #     print(message.value)
             #print(items)
             #print(df)
             #df.to_csv("ethereum1.csv", index=False)
-            df.to_json("ethereum.json", orient='records')
+            #df.to_json("ethereum.json", orient='records')
